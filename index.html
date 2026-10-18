@@ -4,118 +4,204 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clever School Portal</title>
-    <!-- Tailwind CSS for modern, professional styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans text-gray-900">
 
-    <!-- Navigation Bar -->
-    <header class="bg-blue-600 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <!-- Header & SSO Role Switcher -->
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold">🎓 Clever School Portal</span>
+                <span class="text-xl font-bold">🎓 Clever School Portal</span>
             </div>
-            <div class="flex items-center space-x-4">
-                <span id="user-role-badge" class="bg-blue-700 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Role: Admin</span>
-                <button onclick="alert('Logged out successfully!')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm transition">Logout</button>
+            
+            <!-- SSO / Role Switcher -->
+            <div class="flex items-center space-x-3 bg-blue-700 px-3 py-1.5 rounded-lg">
+                <span class="text-xs font-semibold uppercase tracking-wider text-blue-200">SSO Role:</span>
+                <select id="role-selector" onchange="changeRole(this.value)" class="bg-blue-800 text-white text-sm font-medium px-2 py-1 rounded border border-blue-600 focus:outline-none">
+                    <option value="admin">Administrator</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                    <option value="parent">Parent</option>
+                </select>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <span id="user-display-name" class="text-sm font-medium">Dr. Admin User</span>
+                <button onclick="alert('Logged out successfully.')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition">Logout</button>
             </div>
         </div>
     </header>
 
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-gray-200 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto space-x-6 py-3 text-sm font-medium text-gray-600">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn text-blue-600 border-b-2 border-blue-600 pb-1 whitespace-nowrap">📊 Dashboard</button>
+            <button onclick="switchTab('academics')" id="nav-academics" class="tab-btn hover:text-blue-600 pb-1 whitespace-nowrap">📚 Academics & Subjects</button>
+            <button onclick="switchTab('assignments')" id="nav-assignments" class="tab-btn hover:text-blue-600 pb-1 whitespace-nowrap">📝 Assignments & Quizzes</button>
+            <button onclick="switchTab('attendance')" id="nav-attendance" class="tab-btn hover:text-blue-600 pb-1 whitespace-nowrap">📋 Attendance & Reports</button>
+            <button onclick="switchTab('calendar')" id="nav-calendar" class="tab-btn hover:text-blue-600 pb-1 whitespace-nowrap">📅 Event Calendar</button>
+            <button onclick="switchTab('ai')" id="nav-ai" class="tab-btn hover:text-blue-600 pb-1 whitespace-nowrap">🤖 AI Assistant</button>
+        </div>
+    </nav>
+
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 py-8">
-        
-        <!-- Welcome Banner -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Welcome back, Administrator!</h1>
-                <p class="text-gray-500 mt-1">Here is what is happening across your school network today.</p>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="switchTab('dashboard')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium shadow hover:bg-blue-700 transition">Dashboard</button>
-                <button onclick="switchTab('ai')" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium shadow hover:bg-emerald-700 transition">AI Assistant</button>
-            </div>
-        </div>
 
-        <!-- Dashboard Section -->
-        <div id="section-dashboard" class="space-y-8">
-            <!-- Quick Stats Grid -->
+        <!-- 1. DASHBOARD TAB -->
+        <div id="section-dashboard" class="tab-section space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h1 id="welcome-title" class="text-2xl font-bold text-gray-800">Welcome back, Administrator!</h1>
+                <p id="welcome-subtitle" class="text-gray-500 mt-1">Here is the real-time operational summary across your school network.</p>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500">Total Students</p>
+                    <p class="text-sm font-medium text-gray-500">Total Enrolled</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">1,245</h3>
-                    <span class="text-xs text-emerald-600 font-semibold mt-2 inline-block">+4% this term</span>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500">Active Teachers</p>
+                    <p class="text-sm font-medium text-gray-500">Active Staff</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">84</h3>
-                    <span class="text-xs text-blue-600 font-semibold mt-2 inline-block">100% Verified</span>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500">Daily Attendance</p>
+                    <p class="text-sm font-medium text-gray-500">Attendance Rate</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">96.8%</h3>
-                    <span class="text-xs text-emerald-600 font-semibold mt-2 inline-block">Above average</span>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-sm font-medium text-gray-500">Pending Assignments</p>
+                    <p class="text-sm font-medium text-gray-500">Pending Tasks</p>
                     <h3 class="text-3xl font-bold text-gray-800 mt-2">18</h3>
-                    <span class="text-xs text-amber-600 font-semibold mt-2 inline-block">Requires review</span>
-                </div>
-            </div>
-
-            <!-- Recent Activity / Modules -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">School Management Modules</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-lg bg-blue-50 border border-blue-100 hover:shadow-md transition cursor-pointer">
-                            <h4 class="font-semibold text-blue-900">📚 Academics & Subjects</h4>
-                            <p class="text-sm text-blue-700 mt-1">Manage grade levels, course codes, and teacher schedules.</p>
-                        </div>
-                        <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-100 hover:shadow-md transition cursor-pointer">
-                            <h4 class="font-semibold text-emerald-900">📝 Assignments & Quizzes</h4>
-                            <p class="text-sm text-emerald-700 mt-1">Upload homework, track submissions, and review scores.</p>
-                        </div>
-                        <div class="p-4 rounded-lg bg-purple-50 border border-purple-100 hover:shadow-md transition cursor-pointer">
-                            <h4 class="font-semibold text-purple-900">📊 Attendance & Report Cards</h4>
-                            <p class="text-sm text-purple-700 mt-1">Log daily status and generate affective/psychomotor grades.</p>
-                        </div>
-                        <div class="p-4 rounded-lg bg-amber-50 border border-amber-100 hover:shadow-md transition cursor-pointer">
-                            <h4 class="font-semibold text-amber-900">📅 Event Calendar</h4>
-                            <p class="text-sm text-amber-700 mt-1">View upcoming exams, holidays, and school meetings.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick AI Widget Preview -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">🤖 Quick AI Help</h3>
-                        <p class="text-sm text-gray-500 mb-4">Ask the assistant anything regarding portal policies or timetables.</p>
-                        <div class="bg-gray-50 p-3 rounded-lg text-sm text-gray-700 mb-4 border border-gray-200">
-                            "Hello! How can I assist you with portal management today?"
-                        </div>
-                    </div>
-                    <button onclick="switchTab('ai')" class="w-full py-2 bg-emerald-600 text-white rounded-lg font-medium text-sm hover:bg-emerald-700 transition">Open Full Assistant</button>
                 </div>
             </div>
         </div>
 
-        <!-- AI Assistant Section (Hidden by default, toggled via tabs) -->
-        <div id="section-ai" class="hidden bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Clever School AI Assistant</h3>
-            <p class="text-sm text-gray-500 mb-4">Type a query below to get instant answers about schedules, fees, or assignments.</p>
-            
-            <div id="chat-box" class="h-64 overflow-y-auto bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 space-y-3">
-                <div class="bg-white p-3 rounded-lg shadow-xs border border-gray-100 max-w-lg">
-                    <span class="font-bold text-emerald-600 text-xs block mb-1">AI Assistant</span>
-                    Ready to help you manage your school tasks. Try asking about exams or fees!
+        <!-- 2. ACADEMICS TAB -->
+        <div id="section-academics" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Subjects & Course Management</h2>
+                    <button onclick="alert('Subject creation modal opened.')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">＋ Add Subject</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-gray-500 text-sm">
+                                <th class="py-3 px-4">Subject Name</th>
+                                <th class="py-3 px-4">Code</th>
+                                <th class="py-3 px-4">Assigned Teacher</th>
+                                <th class="py-3 px-4">Grade Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjects-table" class="text-sm text-gray-700">
+                            <tr class="border-b border-gray-100"><td class="py-3 px-4 font-semibold">Mathematics</td><td class="py-3 px-4">MTH101</td><td class="py-3 px-4">Mr. Johnson</td><td class="py-3 px-4">Grade 10</td></tr>
+                            <tr class="border-b border-gray-100"><td class="py-3 px-4 font-semibold">English Language</td><td class="py-3 px-4">ENG101</td><td class="py-3 px-4">Mrs. Davis</td><td class="py-3 px-4">Grade 10</td></tr>
+                            <tr class="border-b border-gray-100"><td class="py-3 px-4 font-semibold">Basic Science</td><td class="py-3 px-4">SCI102</td><td class="py-3 px-4">Mr. Smith</td><td class="py-3 px-4">Grade 9</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div class="flex gap-2">
-                <input type="text" id="ai-input" placeholder="Ask a question..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                <button onclick="sendQuery()" class="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition">Ask</button>
+        <!-- 3. ASSIGNMENTS & QUIZZES TAB -->
+        <div id="section-assignments" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Assignments & Homework Portal</h2>
+                    <button onclick="createNewAssignment()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium">＋ New Assignment</button>
+                </div>
+                <div id="assignments-list" class="space-y-4">
+                    <div class="p-4 rounded-lg border border-gray-200 bg-gray-50 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Algebra Quadratic Equations</h4>
+                            <p class="text-sm text-gray-500">Subject: Mathematics | Due: Oct 25, 2026</p>
+                        </div>
+                        <button onclick="submitAssignment(this)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Submit Work</button>
+                    </div>
+                    <div class="p-4 rounded-lg border border-gray-200 bg-gray-50 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Photosynthesis Lab Report</h4>
+                            <p class="text-sm text-gray-500">Subject: Basic Science | Due: Oct 28, 2026</p>
+                        </div>
+                        <button onclick="submitAssignment(this)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Submit Work</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ATTENDANCE & REPORT CARDS TAB -->
+        <div id="section-attendance" class="tab-section hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Attendance Module -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">📋 Daily Attendance Log</h3>
+                    <p class="text-sm text-gray-500 mb-4">Record or review status for Grade 10 students.</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <span class="font-medium text-sm">Alice Adebayo</span>
+                            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded">Present</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <span class="font-medium text-sm">Chinedu Okafor</span>
+                            <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded">Late</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <span class="font-medium text-sm">Fatima Bello</span>
+                            <span class="px-2.5 py-1 bg-red-100 text-red-800 text-xs font-bold rounded">Absent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card Module -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">📊 Term Report Card</h3>
+                    <p class="text-sm text-gray-500 mb-4">Affective & Psychomotor trait evaluations.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between p-2 bg-gray-50 rounded"><span>Punctuality:</span><strong class="text-blue-600">Grade A</strong></div>
+                        <div class="flex justify-between p-2 bg-gray-50 rounded"><span>Neatness:</span><strong class="text-blue-600">Grade A</strong></div>
+                        <div class="flex justify-between p-2 bg-gray-50 rounded"><span>Politeness:</span><strong class="text-blue-600">Grade B</strong></div>
+                        <div class="flex justify-between p-2 bg-gray-50 rounded"><span>Handwriting:</span><strong class="text-blue-600">Grade A</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. CALENDAR TAB -->
+        <div id="section-calendar" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">📅 School Event Calendar</h2>
+                <div class="space-y-3">
+                    <div class="p-4 rounded-lg bg-blue-50 border border-blue-100">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Nov 2, 2026</span>
+                        <h4 class="font-bold text-blue-900 mt-1">Mid-Term Examinations Begin</h4>
+                        <p class="text-sm text-blue-700">All students are expected to arrive by 7:30 AM.</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-100">
+                        <span class="text-xs font-bold text-emerald-600 uppercase">Nov 15, 2026</span>
+                        <h4 class="font-bold text-emerald-900 mt-1">Inter-House Sports Competition</h4>
+                        <p class="text-sm text-emerald-700">Main school sports stadium field events.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. AI ASSISTANT TAB -->
+        <div id="section-ai" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Clever School AI Assistant</h3>
+                <p class="text-sm text-gray-500 mb-4">Ask questions regarding assignments, fees, or exam schedules.</p>
+                
+                <div id="chat-box" class="h-64 overflow-y-auto bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 space-y-3">
+                    <div class="bg-white p-3 rounded-lg shadow-xs border border-gray-100 max-w-lg">
+                        <span class="font-bold text-emerald-600 text-xs block mb-1">AI Assistant</span>
+                        Hello! I am your portal assistant. How can I help you today?
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="text" id="ai-input" placeholder="Type a question..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <button onclick="sendQuery()" class="px-6 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition">Ask</button>
+                </div>
             </div>
         </div>
 
@@ -126,21 +212,72 @@
         &copy; 2026 Clever School Portal. All rights reserved.
     </footer>
 
-    <!-- Interactive Scripts -->
+    <!-- Interactive Script Logic -->
     <script>
-        function switchTab(tab) {
-            const dashboardSection = document.getElementById('section-dashboard');
-            const aiSection = document.getElementById('section-ai');
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                el.classList.add('text-gray-600');
+            });
 
-            if (tab === 'dashboard') {
-                dashboardSection.classList.remove('hidden');
-                aiSection.classList.add('hidden');
-            } else if (tab === 'ai') {
-                dashboardSection.classList.add('hidden');
-                aiSection.classList.remove('hidden');
+            document.getElementById('section-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            activeBtn.classList.remove('text-gray-600');
+        }
+
+        // SSO Role Switcher
+        function changeRole(role) {
+            const nameEl = document.getElementById('user-display-name');
+            const titleEl = document.getElementById('welcome-title');
+            const subEl = document.getElementById('welcome-subtitle');
+
+            if (role === 'admin') {
+                nameEl.innerText = "Dr. Admin User";
+                titleEl.innerText = "Welcome back, Administrator!";
+                subEl.innerText = "Here is the real-time operational summary across your school network.";
+            } else if (role === 'teacher') {
+                nameEl.innerText = "Mr. Johnson (Teacher)";
+                titleEl.innerText = "Welcome, Teacher Johnson!";
+                subEl.innerText = "Manage your subject gradebooks, class attendance, and assignments here.";
+            } else if (role === 'student') {
+                nameEl.innerText = "Alice Adebayo (Student)";
+                titleEl.innerText = "Welcome back, Alice!";
+                subEl.innerText = "Check your upcoming homework, test scores, and timetable.";
+            } else if (role === 'parent') {
+                nameEl.innerText = "Mrs. Adebayo (Parent)";
+                titleEl.innerText = "Welcome, Parent Portal";
+                subEl.innerText = "Monitor your child's attendance records and term report cards.";
             }
         }
 
+        // Assignment Actions
+        function submitAssignment(btn) {
+            btn.innerText = "Submitted ✓";
+            btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            btn.classList.add('bg-emerald-600');
+            alert('Assignment submitted successfully!');
+        }
+
+        function createNewAssignment() {
+            const title = prompt("Enter assignment title:");
+            if (!title) return;
+            const list = document.getElementById('assignments-list');
+            list.innerHTML += `
+                <div class="p-4 rounded-lg border border-gray-200 bg-gray-50 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-gray-800">${title}</h4>
+                        <p class="text-sm text-gray-500">Subject: General | Due: Next Week</p>
+                    </div>
+                    <button onclick="submitAssignment(this)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Submit Work</button>
+                </div>
+            `;
+            alert('New assignment published successfully!');
+        }
+
+        // AI Assistant
         function sendQuery() {
             const input = document.getElementById('ai-input');
             const chatBox = document.getElementById('chat-box');
@@ -148,7 +285,6 @@
 
             if (!query) return;
 
-            // Append User Message
             chatBox.innerHTML += `
                 <div class="bg-blue-50 p-3 rounded-lg shadow-xs border border-blue-100 max-w-lg ml-auto text-right">
                     <span class="font-bold text-blue-600 text-xs block mb-1">You</span>
@@ -158,14 +294,15 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Generate Mock AI Response
             setTimeout(() => {
                 let reply = "I am your Clever School Assistant. You can check the calendar tab for upcoming school events.";
                 const lower = query.toLowerCase();
                 if (lower.includes('fee') || lower.includes('payment')) {
-                    reply = "School fees for the current term can be paid through the Admin Finance Portal or authorized bank branches.";
+                    reply = "School fees for the current term can be paid through the Admin Finance Portal.";
                 } else if (lower.includes('exam') || lower.includes('test')) {
-                    reply = "Mid-term examinations are scheduled to begin on the first Monday of next month. Check your subject dashboard for specific timetables.";
+                    reply = "Mid-term examinations are scheduled to begin on November 2, 2026.";
+                } else if (lower.includes('assignment')) {
+                    reply = "You can view and submit your pending homework under the 'Assignments & Quizzes' tab.";
                 }
 
                 chatBox.innerHTML += `
@@ -175,7 +312,7 @@
                     </div>
                 `;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
+            }, 500);
         }
     </script>
 </body>
